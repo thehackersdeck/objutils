@@ -33,7 +33,7 @@ Using mvn-repo:
 
 <repositories>
     <repository>
-        <id>konfiger</id>
+        <id>objcopier</id>
         <url>https://raw.github.com/thehackersdeck/objcopier/mvn-repo/</url>
     </repository>
 </repositories>
@@ -77,4 +77,12 @@ Add the dependency:
 dependencies {
         implementation 'com.github.thehackersdeck:objcopier:1.0'
 }
+```
+
+### Usage
+
+Copy two from a source into target
+
+```java
+ObjCopier.copyFields(target, source);
 ```
