@@ -21,3 +21,29 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+.zip
+*.tgz
+*.tar
+*.7z
+*.rar
+*.egg-info
+*dist/
+*build/
+*egg-info/
+*.iml
+*.mf
+
+# JAVA
+
+*.class
+*.jar
+/nbproject/private/
+/build/
+/dist/
+/out/
+/target/
+/nbproject/
+/.idea/
+
+src/test/resources/konfiger.conf
