@@ -86,3 +86,9 @@ Copy two from a source into target
 ```java
 ObjCopier.copyFields(target, source);
 ```
+
+Copy two from multiple sources into a single target.
+
+```java
+ObjCopier.copyFields(target, source1, source2, source);
+```
