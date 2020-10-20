@@ -11,28 +11,77 @@ public class ObjCopier {
         copyFields(target, false, source1);
     }
 
+    public static <T> void copyFieldsExcept(String[] excepts, T target, T source1) throws FatalObjCopierException {
+        copyFieldsExcept(excepts, target, false, source1);
+    }
+
+    public static <T> void copySomeFields(String[] selected, T target, T source1) throws FatalObjCopierException {
+        copySomeFields(selected, target, false, source1);
+    }
+
     public static <T> void copyTwoObjFields(T target, T source1, T source2) throws FatalObjCopierException {
         copyFields(target, false, source1, source2);
     }
 
     @SafeVarargs
     public static <T> void copyFields(T target, boolean useValueGreaterThanZero, T... sources) throws FatalObjCopierException {
-        copyFieldsInternal(target, useValueGreaterThanZero, false, sources);
+        copyFieldsInternal(new String[]{}, new String[]{}, target, useValueGreaterThanZero, false, sources);
+    }
+
+    @SafeVarargs
+    public static <T> void copyFieldsExcept(String[] excepts, T target,
+                                            boolean useValueGreaterThanZero, T... sources) throws FatalObjCopierException {
+        copyFieldsInternal(excepts, new String[]{}, target, useValueGreaterThanZero, false, sources);
+    }
+
+    @SafeVarargs
+    public static <T> void copySomeFields(String[] selected, T target,
+                                      boolean useValueGreaterThanZero, T... sources) throws FatalObjCopierException {
+        copyFieldsInternal(new String[]{}, selected, target, useValueGreaterThanZero, false, sources);
     }
 
     @SafeVarargs
     public static <T> void copyFieldsWithHigherValue(T target, boolean useHigherValue, T... sources) throws FatalObjCopierException {
-        copyFieldsInternal(target, true, useHigherValue, sources);
+        copyFieldsInternal(new String[]{}, new String[]{}, target, true, useHigherValue, sources);
     }
 
     @SafeVarargs
-    private static <T> void copyFieldsInternal(T target, boolean useValueGreaterThanZero, boolean useHigherValue, T... sources) throws FatalObjCopierException {
+    public static <T> void copyFieldsWithHigherValueExcept(String[] excepts, T target,
+                                                           boolean useHigherValue, T... sources) throws FatalObjCopierException {
+        copyFieldsInternal(excepts, new String[]{}, target, true, useHigherValue, sources);
+    }
+
+    @SafeVarargs
+    public static <T> void copySomeFieldsWithHigherValue(String[] selected, T target,
+                                                           boolean useHigherValue, T... sources) throws FatalObjCopierException {
+        copyFieldsInternal(new String[]{}, selected, target, true, useHigherValue, sources);
+    }
+
+    @SafeVarargs
+    public static <T> void copyFieldsWithHigherValue(String[] excepts, String[] selected, T target,
+                                                         boolean useHigherValue, T... sources) throws FatalObjCopierException {
+        copyFieldsInternal(excepts, selected, target, true, useHigherValue, sources);
+    }
+
+    @SafeVarargs
+    private static <T> void copyFieldsInternal(String[] excepts, String[] selected, T target, boolean useValueGreaterThanZero,
+                                               boolean useHigherValue, T... sources) throws FatalObjCopierException {
         if (sources.length == 0) {
             return;
         }
         Field[] source1Fields = sources[0].getClass().getDeclaredFields();
         for (int index = 0; index < source1Fields.length; ++index) {
             String fieldName = source1Fields[index].getName();
+            if (excepts.length > 0) {
+                if (existInArray(excepts, fieldName)) {
+                    continue;
+                }
+            }
+            if (selected.length > 0) {
+                if (!existInArray(selected, fieldName)) {
+                    continue;
+                }
+            }
             try {
                 Object[][] fields = new Object[sources.length][2];
                 for (int counter = 0; counter < fields.length; ++counter) {
@@ -191,8 +240,13 @@ public class ObjCopier {
         return value;
     }
 
-    private static void resetFieldsAccessibility(Field field1, Field field2, boolean a1, boolean a2) {
-
+    private static boolean existInArray(String[] values, String findMe) {
+        for (String value : values) {
+            if (value.equals(findMe)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean objectsAreSameType(Class<?> objectTypeCheck, Class<?>... objectTypes) {

@@ -139,4 +139,16 @@ public class ObjCopierTest {
         Assert.assertTrue(ObjCopier.deepCompare(obj, obj4));
     }
 
+    @Test
+    public void TestCopyExcept1() throws FatalObjCopierException {
+        AnObject obj = new AnObject();
+        ObjCopier.copyFieldsWithHigherValueExcept(new String[] {}, obj, true, obj1, obj2, obj3, obj5);
+        Assert.assertTrue(ObjCopier.deepCompare(obj, obj4));
+
+        obj = new AnObject();
+        ObjCopier.copyFieldsWithHigherValueExcept(new String[] {"id"}, obj, true, obj1, obj2, obj3, obj5);
+        obj.id = 0;
+        Assert.assertFalse(ObjCopier.deepCompare(obj, obj4));
+    }
+
 }
