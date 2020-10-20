@@ -27,7 +27,7 @@ Using mvn-repo:
     <dependency>
         <groupId>io.github.thecarisma</groupId>
         <artifactId>objcopier</artifactId>
-        <version>1.0</version>
+        <version>1.0.0</version>
     </dependency>
 </dependencies>
 
@@ -46,7 +46,7 @@ Using jitpack.io:
     <dependency>
         <groupId>com.github.thehackersdeck</groupId>
         <artifactId>objcopier</artifactId>
-        <version>1.0</version>
+        <version>1.0.0</version>
     </dependency>
 </dependencies>
 
@@ -75,7 +75,7 @@ Add the dependency:
 
 ```gradle
 dependencies {
-        implementation 'com.github.thehackersdeck:objcopier:1.0'
+        implementation 'com.github.thehackersdeck:objcopier:1.0.0'
 }
 ```
 
