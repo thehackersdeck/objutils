@@ -88,67 +88,51 @@ public class ObjCopierTest {
     }
 
     @Test
-    public void TestShallowCompare1() {
-        Assert.assertTrue(ObjCopier.shallowCompare(obj1, obj1));
-        Assert.assertFalse(ObjCopier.shallowCompare(obj1, obj2));
-        Assert.assertTrue(ObjCopier.shallowCompare(obj2, obj2));
-    }
-
-    @Test
-    public void TestDeepCompare1() throws FatalObjCopierException {
-        Assert.assertFalse(ObjCopier.deepCompare(obj1, obj2));
-        Assert.assertFalse(ObjCopier.deepCompare(obj1, obj3));
-        Assert.assertFalse(ObjCopier.deepCompare(obj2, obj3));
-        Assert.assertFalse(ObjCopier.deepCompare(obj5, obj3));
-        Assert.assertFalse(ObjCopier.deepCompare(obj2, obj5));
-    }
-
-    @Test
     public void TestCopy1() throws FatalObjCopierException {
         AnObject obj = new AnObject();
         ObjCopier.copyFields(obj, obj2);
-        Assert.assertTrue(ObjCopier.deepCompare(obj, obj2));
-        Assert.assertFalse(ObjCopier.deepCompare(obj, obj6));
+        Assert.assertTrue(ObjUtils.deepCompare(obj, obj2));
+        Assert.assertFalse(ObjUtils.deepCompare(obj, obj6));
     }
 
     @Test
     public void TestCopy2() throws FatalObjCopierException {
         AnObject obj = new AnObject();
         ObjCopier.copyTwoObjFields(obj, obj2, obj1);
-        Assert.assertTrue(ObjCopier.deepCompare(obj, obj6));
+        Assert.assertTrue(ObjUtils.deepCompare(obj, obj6));
     }
 
     @Test
     public void TestCopy3() throws FatalObjCopierException {
         AnObject obj = new AnObject();
         ObjCopier.copyFields(obj, true, obj2, obj1);
-        Assert.assertTrue(ObjCopier.deepCompare(obj, obj7));
+        Assert.assertTrue(ObjUtils.deepCompare(obj, obj7));
     }
 
     @Test
     public void TestCopy4() throws FatalObjCopierException {
         AnObject obj = new AnObject();
         ObjCopier.copyFields(obj, true, obj2, obj1, obj5);
-        Assert.assertTrue(ObjCopier.deepCompare(obj, obj7));
+        Assert.assertTrue(ObjUtils.deepCompare(obj, obj7));
     }
 
     @Test
     public void TestCopy5() throws FatalObjCopierException {
         AnObject obj = new AnObject();
         ObjCopier.copyFieldsWithHigherValue(obj, true, obj1, obj2, obj3, obj5);
-        Assert.assertTrue(ObjCopier.deepCompare(obj, obj4));
+        Assert.assertTrue(ObjUtils.deepCompare(obj, obj4));
     }
 
     @Test
     public void TestCopyExcept1() throws FatalObjCopierException {
         AnObject obj = new AnObject();
         ObjCopier.copyFieldsWithHigherValueExcept(new String[] {}, obj, true, obj1, obj2, obj3, obj5);
-        Assert.assertTrue(ObjCopier.deepCompare(obj, obj4));
+        Assert.assertTrue(ObjUtils.deepCompare(obj, obj4));
 
         obj = new AnObject();
         ObjCopier.copyFieldsWithHigherValueExcept(new String[] {"id"}, obj, true, obj1, obj2, obj3, obj5);
         obj.id = 0;
-        Assert.assertFalse(ObjCopier.deepCompare(obj, obj4));
+        Assert.assertFalse(ObjUtils.deepCompare(obj, obj4));
     }
 
 }

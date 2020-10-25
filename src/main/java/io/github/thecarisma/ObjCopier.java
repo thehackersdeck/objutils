@@ -111,43 +111,6 @@ public class ObjCopier {
         }
     }
 
-    public static  <T> boolean shallowCompare(T source1, T source2) {
-        return source1.equals(source2);
-    }
-
-    public static <T> boolean deepCompare(T source1, T source2) throws FatalObjCopierException {
-        Field[] source1Fields = source1.getClass().getDeclaredFields();
-        Field[] source2Fields = source2.getClass().getDeclaredFields();
-
-        if (source1Fields.length != source2Fields.length) {
-            return false;
-        }
-        for (int index = 0; index < source1Fields.length; ++index) {
-            Field field = source1Fields[index];
-            Field field2 = source2Fields[index];
-            boolean accessible = field.isAccessible();
-            boolean accessible2 = field2.isAccessible();
-            field.setAccessible(true);
-            field2.setAccessible(true);
-
-            Object value1 = null;
-            Object value2 = null;
-            try {
-                value1 = field.get(source1);
-                value2 = field2.get(source2);
-            } catch (IllegalAccessException e) {
-                throw new FatalObjCopierException("Could not get the value of the property '" + field.getName() + "' from the two source for compare");
-            }
-            if ((value1 == null && value2 != null) || (value1 != null && !value1.equals(value2))) {
-                return false;
-            }
-
-            field.setAccessible(accessible);
-            field2.setAccessible(accessible2);
-        }
-        return true;
-    }
-
     private static Object findUsableValue(Object[][] fields, boolean useValueGreaterThanZero, boolean useHigherValue) throws IllegalAccessException {
         Object value = null;
         Object source1 = null;
@@ -185,8 +148,8 @@ public class ObjCopier {
                 value = value2;
 
             } else if ((useValueGreaterThanZero || useHigherValue) && value2 != null) {
-                if ((objectsAreSameType(Integer.class, field1.getType(), field2.getType()) ||
-                        objectsAreSameType(int.class, field1.getType(), field2.getType())) &&
+                if ((ObjUtils.objectsAreSameType(Integer.class, field1.getType(), field2.getType()) ||
+                        ObjUtils.objectsAreSameType(int.class, field1.getType(), field2.getType())) &&
                         (((int)value2) > ((int)value))) {
                     value = value2;
                     if (!useHigherValue) {
@@ -194,8 +157,8 @@ public class ObjCopier {
                         return value;
                     }
 
-                } else if ((objectsAreSameType(Long.class, field1.getType(), field2.getType()) ||
-                        objectsAreSameType(long.class, field1.getType(), field2.getType())) &&
+                } else if ((ObjUtils.objectsAreSameType(Long.class, field1.getType(), field2.getType()) ||
+                        ObjUtils.objectsAreSameType(long.class, field1.getType(), field2.getType())) &&
                         (((long)value2) > ((long)value))) {
                     value = value2;
                     if (!useHigherValue) {
@@ -203,8 +166,8 @@ public class ObjCopier {
                         return value;
                     }
 
-                } else if ((objectsAreSameType(Float.class, field1.getType(), field2.getType()) ||
-                        objectsAreSameType(float.class, field1.getType(), field2.getType())) &&
+                } else if ((ObjUtils.objectsAreSameType(Float.class, field1.getType(), field2.getType()) ||
+                        ObjUtils.objectsAreSameType(float.class, field1.getType(), field2.getType())) &&
                         (((float)value2) > ((float)value))) {
                     value = value2;
                     if (!useHigherValue) {
@@ -212,8 +175,8 @@ public class ObjCopier {
                         return value;
                     }
 
-                } else if ((objectsAreSameType(Double.class, field1.getType(), field2.getType()) ||
-                        objectsAreSameType(double.class, field1.getType(), field2.getType())) &&
+                } else if ((ObjUtils.objectsAreSameType(Double.class, field1.getType(), field2.getType()) ||
+                        ObjUtils.objectsAreSameType(double.class, field1.getType(), field2.getType())) &&
                         (((double)value2) > ((double)value))) {
                     value = value2;
                     if (!useHigherValue) {
@@ -221,8 +184,8 @@ public class ObjCopier {
                         return value;
                     }
 
-                } else if ((objectsAreSameType(Boolean.class, field1.getType(), field2.getType()) ||
-                        objectsAreSameType(boolean.class, field1.getType(), field2.getType())) &&
+                } else if ((ObjUtils.objectsAreSameType(Boolean.class, field1.getType(), field2.getType()) ||
+                        ObjUtils.objectsAreSameType(boolean.class, field1.getType(), field2.getType())) &&
                         (!(boolean)value)) {
                     value = value2;
 
@@ -247,15 +210,6 @@ public class ObjCopier {
             }
         }
         return false;
-    }
-
-    public static boolean objectsAreSameType(Class<?> objectTypeCheck, Class<?>... objectTypes) {
-        for (Class<?> objectType : objectTypes) {
-            if (objectType != objectTypeCheck) {
-                return false;
-            }
-        }
-        return true;
     }
 
 }

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.thecarisma</groupId>
-    <artifactId>objcopier</artifactId>
+    <artifactId>objutils</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -45,7 +45,7 @@
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
                     <branch>refs/heads/mvn-repo</branch>
                     <includes><include>**/*</include></includes>
-                    <repositoryName>objcopier</repositoryName>
+                    <repositoryName>objutils</repositoryName>
                     <repositoryOwner>thehackersdeck</repositoryOwner>
                 </configuration>
                 <executions>
