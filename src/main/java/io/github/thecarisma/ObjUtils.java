@@ -10,19 +10,19 @@ import java.util.List;
  */
 public class ObjUtils {
 
-    public static <T> Field[] getFields(T source) {
-        return source.getClass().getDeclaredFields();
+    public static <T> Field[] getFields(T object) {
+        return object.getClass().getDeclaredFields();
     }
 
-    public static <T> Method getObjMethod(T source, String functionName, Class<?>... parameterType) throws NoSuchMethodException {
-        return source.getClass().getMethod(functionName, parameterType);
+    public static <T> Method getObjMethod(T object, String functionName, Class<?>... parameterType) throws NoSuchMethodException {
+        return object.getClass().getMethod(functionName, parameterType);
     }
 
-    public static <T> Object invokeObjMethod(T source, String functionName, Class<?>[] parameterType, Object... parameters)
+    public static <T> Object invokeObjMethod(T object, String functionName, Class<?>[] parameterType, Object... parameters)
             throws FatalObjCopierException {
         try {
-            Method method = getObjMethod(source, functionName, parameterType);
-            return method.invoke(source, parameters);
+            Method method = getObjMethod(object, functionName, parameterType);
+            return method.invoke(object, parameters);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new FatalObjCopierException(e.getMessage());
         }
@@ -32,20 +32,20 @@ public class ObjUtils {
 
     }
 
-    public static  <T> boolean shallowCompare(T source1, T source2) {
-        return source1.equals(source2);
+    public static  <T> boolean shallowCompare(T object1, T object2) {
+        return object1.equals(object2);
     }
 
-    public static <T> boolean deepCompare(T source1, T source2) throws FatalObjCopierException {
-        Field[] source1Fields = source1.getClass().getDeclaredFields();
-        Field[] source2Fields = source2.getClass().getDeclaredFields();
+    public static <T> boolean deepCompare(T object1, T object2) throws FatalObjCopierException {
+        Field[] object1Fields = object1.getClass().getDeclaredFields();
+        Field[] object2Fields = object2.getClass().getDeclaredFields();
 
-        if (source1Fields.length != source2Fields.length) {
+        if (object1Fields.length != object2Fields.length) {
             return false;
         }
-        for (int index = 0; index < source1Fields.length; ++index) {
-            Field field = source1Fields[index];
-            Field field2 = source2Fields[index];
+        for (int index = 0; index < object1Fields.length; ++index) {
+            Field field = object1Fields[index];
+            Field field2 = object2Fields[index];
             boolean accessible = field.isAccessible();
             boolean accessible2 = field2.isAccessible();
             field.setAccessible(true);
@@ -54,10 +54,10 @@ public class ObjUtils {
             Object value1 = null;
             Object value2 = null;
             try {
-                value1 = field.get(source1);
-                value2 = field2.get(source2);
+                value1 = field.get(object1);
+                value2 = field2.get(object2);
             } catch (IllegalAccessException e) {
-                throw new FatalObjCopierException("Could not get the value of the property '" + field.getName() + "' from the two source for compare");
+                throw new FatalObjCopierException("Could not get the value of the property '" + field.getName() + "' from the two object for compare");
             }
             if ((value1 == null && value2 != null) || (value1 != null && !value1.equals(value2))) {
                 return false;
