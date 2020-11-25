@@ -1,5 +1,6 @@
 package io.github.thecarisma;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
@@ -82,6 +83,12 @@ public class ObjCopier {
                     continue;
                 }
             }
+            CopyProperty copyProperty = source1Fields[index].getAnnotation(CopyProperty.class);
+            if (copyProperty != null) {
+                if (copyProperty.ignore()) {
+                    continue;
+                }
+            }
             try {
                 Object[][] fields = new Object[sources.length][2];
                 for (int counter = 0; counter < fields.length; ++counter) {
@@ -106,7 +113,7 @@ public class ObjCopier {
                 // we trying to get as much data as possible
                 // from the two source into the target
             } catch (IllegalAccessException e) {
-                throw new FatalObjCopierException("Could not get the value of the property '" + fieldName + "' from the two source");
+                throw new FatalObjCopierException("Could not get the value of the property '" + fieldName + "' from all the provided source");
             }
         }
     }
